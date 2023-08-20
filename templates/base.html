@@ -1,0 +1,78 @@
+<!-- Header section -->
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vincent Blogs</title>
+    <script src="https://kit.fontawesome.com/bf4cb2bb37.js" crossorigin="anonymous"></script>
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <link href="{% static 'css/blog.css'%}" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <div class="container">
+            <heade class="">
+                
+                <div class="">
+                   
+                    <nav class=" navbar bg-body-tertiary">
+                        <div class="container-fluid">
+                          <a href="/" class="navbar-brand mt-4">Vincent Blog</a>
+                          <form class="d-flex" role="search" action="{% url 'search'%}" method="GET">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"  name="keyword" value="{{ keyword}}" >
+                            <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
+                          </form>
+                          <div class=" mt-4">
+                            {% if not user.is_authenticated%}
+                            <a class="btn btn-sm btn-warning" href="{% url 'login'%}">Login</a> &nbsp;
+                            <a class="btn btn-sm btn-outline-secondary" href="{% url 'register'%}">Register</a>
+                            {% else%}
+                            <span><a href="{% url 'dashboard'%}">Dashboard</a></span>
+                            &emsp;
+                            <span> <a href="{% url 'logout'%}">Logout</a> </span>
+                            {% endif%}
+                            <hr>
+                        </div>
+                        </div>
+                    </nav>
+                </div>
+            </header>
+
+            <div class="container">
+                <nav class="jumbotron p-0 navbar d-flex justify-content-between">
+                    {% for category in categories%}
+                    <a class="p-2 text-muted" href="{% url 'posts_by_category' category.id%}">{{ category.category_name}}</a>
+                    {% endfor%}
+                </nav>
+            </div>
+
+            <!-- Main content section -->
+            {% block content%}
+
+            {% endblock%}
+        </div>
+
+        <!-- Footer section -->
+        <footer class="blog-footer">
+            <div class="nav-scroller py-1 mb-2">
+                <div class=" me-2">
+                    {% for category in categories%}
+                    <a href="{% url 'posts_by_category' category.id%}">{{ category.category_name}}</a>
+                    {% endfor%} | 
+                    {% if social_links%}
+                        {% for i in social_links%}
+                        <a href="{{ i.link}}" target="_blank">{{ i.platform}}</a>
+                        {% endfor%}
+                    {% endif%}
+                </div>
+            </div>
+            <p>Vincent blog built with ❤️ by <a href="#">Muthui Kyalo</a></p>
+        </footer>
+    </body>
+</html>
